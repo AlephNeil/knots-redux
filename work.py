@@ -757,6 +757,7 @@ foo:
     positive: []
 '''
 
+# Quick comment
 
 if __name__ == '__main__':
     do_everything()
