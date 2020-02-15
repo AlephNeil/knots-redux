@@ -1,3 +1,4 @@
 {
-    "editor.fontFamily": "'Ubuntu Mono'"
+    "editor.fontFamily": "'Ubuntu Mono'",
+    "python.pythonPath": "/home/neil/Envs/knots/bin/python"
 }

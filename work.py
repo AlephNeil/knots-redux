@@ -8,12 +8,12 @@ random.seed(1)
 
 
 yaml_load_options = {
-    'Loader': yaml.CLoader,
+    #'Loader': yaml.CLoader,
 }
 
 yaml_dump_options = {
     #'default_flow_style': True,
-    'Dumper': yaml.CDumper,
+    #'Dumper': yaml.CDumper,
 }
 
 FULL_H = 2500
@@ -659,35 +659,35 @@ def polywalk(diag, node, flag_fwd):
         e = Edge(diag, p=cursor, forward=flag_fwd)
         yield e.data
         
-def short_sequence(diag, root_node):
-    link = diag.index[root_node]
-    prev_node = diag.backward[root_node]
-    next_node = diag.forward[root_node]
+# def short_sequence(diag, root_node):
+#     link = diag.index[root_node]
+#     prev_node = diag.backward[root_node]
+#     next_node = diag.forward[root_node]
 
-def get_bridge(node):
-    pass
-
-
-def first_stab(diag, root_node):
-    link = diag.index[root_node]
-    formatter = '{} {} {} {} {}'
-
-    def h_chunk(cnum, sign):
-        b = sign == '-'
-        return f"{DASH_LEFT if b else '-'}{cnum}{DASH_RIGHT if b else '-'}"
+# def get_bridge(node):
+#     pass
 
 
-def zeroth_stab(diag, root_node):
-    link = diag.index[root_node]
+# def first_stab(diag, root_node):
+#     link = diag.index[root_node]
+#     formatter = '{} {} {} {} {}'
 
-    space_needed = len(str(diag.cursor))
-    fmt = f'{space_needed}d'
+#     def h_chunk(cnum, sign):
+#         b = sign == '-'
+#         return f"{DASH_LEFT if b else '-'}{cnum}{DASH_RIGHT if b else '-'}"
 
-    def wormsign(node):
-        return node_print(node, fmt)
 
-    for node in iterate_until_repeat(root_node, diag.forward):
-        print(wormsign(node))
+# def zeroth_stab(diag, root_node):
+#     link = diag.index[root_node]
+
+#     space_needed = len(str(diag.cursor))
+#     fmt = f'{space_needed}d'
+
+#     def wormsign(node):
+#         return node_print(node, fmt)
+
+#     for node in iterate_until_repeat(root_node, diag.forward):
+#         print(wormsign(node))
 
 
 def iterate_until_repeat(start, nxtfn, eq_test=None):
@@ -706,10 +706,12 @@ def iterate_until_repeat(start, nxtfn, eq_test=None):
 def print_word(word):
     return '*'.join(f'{a}^{b}' for a, b in word)
 
+def do_all():
+    do_everything(int(argv[1]))
 
-def do_everything():
+def do_everything(n):
     circle = LinkDiag(TREFOIL)
-    apply_random_moves_and_balance(circle, int(argv[1]))
+    apply_random_moves_and_balance(circle, n)
     d, segdict = produce_segments(circle, 'H.')
     print('### First, the relators:')
     print(', '.join(print_word(w) for w in get_relators(circle, d, segdict)))
@@ -720,6 +722,16 @@ def do_everything():
     print('### Number of generators:')
     print(len(circle.crossings))
     
+def foo(ltr, n):
+    elts = [f'{ltr}^{i}' for i in range(-n, n+1)]
+    return f'[{",".join(elts)}]'
+
+GAP_MAGIC = "rels:=Union(List(RelatorsOfFpGroup(G),r->List({}, e->r^e)))"
+
+def foo2(ltr, n):
+    return GAP_MAGIC.format(foo(ltr, n))
+
+
 
 EX_YAML = '''
 foo:
@@ -728,7 +740,6 @@ foo:
         b: [4+, 5-]
     positive: [1, 2, 3, 4, 5]
 '''
-
 FIGURE8 = '''
 foo:
     links:
